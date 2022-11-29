@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   get "/leaderboard", to: "leaderboard#index"
   get "/leaderboard/:name", to: "leaderboard#show"
-
   get "/leaderboard-selection-redirect", to:  "leaderboard#get_by_redirect"
+  post "/leaderboard", to: "leaderboard#add_entry"
 
 end

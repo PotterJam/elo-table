@@ -1,5 +1,16 @@
 <h1>Leaderboard <%= @leaderboard_name %></h1>
-<% @leaderboard_items.order(:elo).each do |item| %>
-    <%= item.player %>
-    <%= item.elo %>
+
+<%= form_with url: "/leaderboard", method: :post do |form| %>
+    <%= form.label 'Winner' %>
+    <%= form.text_field :winner_name %>
+    <%= form.label 'Loser' %>
+    <%= form.text_field :loser_name %>
+    <%= hidden_field_tag(:leaderboard_name, @leaderboard_name) %>
+    <%= form.submit 'Submit game result' %>
+<% end %>
+
+<ul>
+<% @players.each do |p| %>
+    <li><%= p.name %> <%= p.elo %></li>
  <% end %>
+</ul>
