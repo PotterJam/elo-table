@@ -3,10 +3,11 @@ class LeaderboardController < ApplicationController
     end
 
     def show
-        # TODO: @leaderboard = Leaderboard.find(params[:id])
+        @leaderboard_items = Leaderboard.where(name: params[:name])
+        @leaderboard_name = params[:name]
     end
 
     def get_by_redirect
-        redirect_to "/leaderboard/" + params[:id]
+        redirect_to "/leaderboard/" + params[:name]
     end
 end

@@ -1,1 +1,5 @@
-<h1>Leaderboard</h1>
+<h1>Leaderboard <%= @leaderboard_name %></h1>
+<% @leaderboard_items.order(:elo).each do |item| %>
+    <%= item.player %>
+    <%= item.elo %>
+ <% end %>

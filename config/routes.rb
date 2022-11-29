@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   root "leaderboard#index"
 
   get "/leaderboard", to: "leaderboard#index"
-  get "/leaderboard/:id", to: "leaderboard#show"
+  get "/leaderboard/:name", to: "leaderboard#show"
 
   get "/leaderboard-selection-redirect", to:  "leaderboard#get_by_redirect"
 
