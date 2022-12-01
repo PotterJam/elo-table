@@ -5,6 +5,7 @@ class LeaderboardController < ApplicationController
     def show
         leaderboard = Leaderboard.find_or_create_by(name: params[:name])
         @players = Player.where(leaderboard_id: leaderboard.id).order(elo: :desc)
+        @player_names = @players.map(&:name).sort_by(&:downcase)
         @leaderboard_name = params[:name]
     end
 
@@ -12,18 +13,27 @@ class LeaderboardController < ApplicationController
         redirect_to "/leaderboard/" + params[:name]
     end
 
-    def add_entry
+    def add_player
         leaderboard = Leaderboard.find_by(name: params[:leaderboard_name])
+        Player
+          .where(name: params[:player_name], leaderboard_id: leaderboard.id)
+          .first_or_create(elo: 1400)
 
-        def get_or_create_player(name, leaderboard_id)
-            return Player
-                .where(:name => name, :leaderboard_id => leaderboard_id)
-                .first_or_create { |player| player.elo = 1400 }
+        redirect_back fallback_location: root_path
+    end
+
+    def add_entry
+        winner_name, loser_name = params[:winner_name], params[:loser_name]
+
+        if winner_name == loser_name
+            return
         end
 
+        leaderboard = Leaderboard.find_by(name: params[:leaderboard_name])
+
         # I'll implement draws when we get one
-        winner = get_or_create_player(params[:winner_name], leaderboard.id)
-        loser = get_or_create_player(params[:loser_name], leaderboard.id)
+        winner = Player.where(:name => winner_name, :leaderboard_id => leaderboard.id).first
+        loser = Player.where(:name => loser_name, :leaderboard_id => leaderboard.id).first
 
         GameEntry.create(
             leaderboard_id: leaderboard.id,

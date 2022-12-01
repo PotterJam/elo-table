@@ -1,10 +1,16 @@
 <h1>Leaderboard <%= @leaderboard_name %></h1>
 
+<%= form_with url: "/leaderboard/players", method: :post do |form| %>
+  <%= form.text_field :player_name %>
+  <%= hidden_field_tag(:leaderboard_name, @leaderboard_name) %>
+  <%= form.submit 'Add new player' %>
+<% end %>
+
 <%= form_with url: "/leaderboard", method: :post do |form| %>
     <%= form.label 'Winner' %>
-    <%= form.text_field :winner_name %>
+    <%= form.select :winner_name, @player_names %>
     <%= form.label 'Loser' %>
-    <%= form.text_field :loser_name %>
+    <%= form.select :loser_name, @player_names %>
     <%= hidden_field_tag(:leaderboard_name, @leaderboard_name) %>
     <%= form.submit 'Submit game result' %>
 <% end %>
