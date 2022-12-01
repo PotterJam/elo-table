@@ -20,12 +20,10 @@ class LeaderboardController < ApplicationController
                 .where(:name => name, :leaderboard_id => leaderboard_id)
                 .first_or_create { |player| player.elo = 1400 }
         end
-        
+
+        # I'll implement draws when we get one
         winner = get_or_create_player(params[:winner_name], leaderboard.id)
         loser = get_or_create_player(params[:loser_name], leaderboard.id)
-        
-        winner.update(elo: winner.elo + 10)
-        loser.update(elo: loser.elo - 10)
 
         GameEntry.create(
             leaderboard_id: leaderboard.id,
@@ -40,6 +38,11 @@ class LeaderboardController < ApplicationController
             versus_id: winner.id,
             winner: false,
             player_elo: loser.elo)
+
+        newWinnerElo, newLoserElo = Elo.calculate_from_result(winner.elo, loser.elo, 1)
+
+        winner.update(elo: newWinnerElo)
+        loser.update(elo: newLoserElo)
 
         redirect_back fallback_location: root_path
     end
