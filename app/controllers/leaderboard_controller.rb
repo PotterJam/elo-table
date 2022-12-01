@@ -7,6 +7,10 @@ class LeaderboardController < ApplicationController
         @players = Player.where(leaderboard_id: leaderboard.id).order(elo: :desc)
         @player_names = @players.map(&:name).sort_by(&:downcase)
         @leaderboard_name = params[:name]
+
+        # Let's not talk about this.
+        @player_id_to_name = @players.to_h { |p| [p.id, p.name] }
+        @games = GameEntry.where(leaderboard_id: leaderboard.id, winner: true).order(created_at: :desc)
     end
 
     def get_by_redirect

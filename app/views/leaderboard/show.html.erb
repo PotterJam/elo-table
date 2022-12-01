@@ -6,6 +6,8 @@
   <%= form.submit 'Add new player' %>
 <% end %>
 
+</br>
+
 <%= form_with url: "/leaderboard", method: :post do |form| %>
     <%= form.label 'Winner' %>
     <%= form.select :winner_name, @player_names %>
@@ -20,3 +22,12 @@
     <li><%= p.name %> <%= p.elo %></li>
  <% end %>
 </ul>
+
+</br>
+</br>
+
+<h3>Games so far</h3>
+<% @games.each do |g| %>
+  <span>[<%= g.created_at.to_date  %>] <%= @player_id_to_name[g.player_id] %> won v <%=@player_id_to_name[g.versus_id] %></span>
+  </br>
+<% end %>
